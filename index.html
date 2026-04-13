@@ -10,14 +10,14 @@
     <style>
         :root {
             --ios-blue: #007aff;
-            --ios-green: #34c759;
-            --ios-red: #ff3b30;
+            --ios-dark-green: #006400; /* Donkergroen */
+            --ios-dark-red: #8b0000;   /* Donkerrood */
             --ios-gray: #8e8e93;
             --ios-bg: #f2f2f7;
         }
 
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
             background: var(--ios-bg); 
             display: flex; 
             align-items: center; 
@@ -37,48 +37,38 @@
             width: 88%; 
             max-width: 360px;
             border: 1px solid rgba(255,255,255,0.3);
+            margin: 20px 0;
         }
         
         #loginScreen { display: block; }
         #appScreen { display: none; }
         
-        .app-icon { 
-            border-radius: 20%; 
-            margin-bottom: 20px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            background: white;
-        }
+        .app-icon { border-radius: 20%; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 
         h2 { font-weight: 700; font-size: 24px; margin-bottom: 8px; letter-spacing: -0.5px; }
-        p { color: var(--ios-gray); margin-bottom: 25px; font-size: 15px; line-height: 1.4; }
+        p { color: var(--ios-gray); margin-bottom: 25px; font-size: 15px; }
 
         .setup-group { margin-bottom: 20px; text-align: left; }
+        .price-settings { border-top: 1px solid #e5e5ea; padding-top: 15px; margin-top: 15px; }
+        
         label { 
             display: block; 
-            font-size: 12px; 
+            font-size: 11px; 
             font-weight: 600; 
             color: var(--ios-gray); 
             margin-bottom: 6px; 
-            margin-left: 4px;
             text-transform: uppercase;
         }
 
         input { 
             width: 100%; 
-            padding: 14px 16px; 
+            padding: 12px; 
             border: 1px solid #d1d1d6; 
-            border-radius: 12px; 
+            border-radius: 10px; 
             font-size: 16px; 
             box-sizing: border-box; 
             margin-bottom: 12px; 
             background: #fff;
-            transition: border 0.2s ease;
-            -webkit-appearance: none;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--ios-blue);
         }
 
         button { 
@@ -86,47 +76,21 @@
             padding: 16px; 
             border-radius: 14px; 
             font-weight: 600; 
-            font-size: 17px; 
+            font-size: 16px; 
             cursor: pointer; 
             width: 100%; 
-            transition: transform 0.1s ease, opacity 0.2s ease;
+            color: white;
         }
 
-        button:active { transform: scale(0.98); opacity: 0.9; }
-
-        .btn-login { background: #000; color: white; margin-top: 10px; }
-        .btn-start { background: var(--ios-green); color: white; margin-top: 10px; margin-bottom: 12px; }
-        .btn-stop { background: var(--ios-red); color: white; }
+        .btn-login { background: #000; margin-top: 10px; }
+        .btn-start { background: var(--ios-dark-green); margin-bottom: 12px; }
+        .btn-stop { background: var(--ios-dark-red); }
         
-        #status { 
-            margin-top: 25px; 
-            font-weight: 600; 
-            font-size: 14px; 
-            color: var(--ios-gray);
-            padding: 8px;
-            background: #f8f8f8;
-            border-radius: 8px;
-            display: inline-block;
-            min-width: 100px;
-        }
+        #status { margin-top: 20px; font-weight: 600; font-size: 14px; color: var(--ios-gray); }
+        #loginError { color: var(--ios-dark-red); font-size: 13px; display: none; margin-top: 10px; }
 
-        #loginError { 
-            color: var(--ios-red); 
-            font-size: 13px; 
-            margin-top: 14px; 
-            display: none; 
-            font-weight: 500; 
-        }
-
-        /* Subtiele animatie bij schermwissel */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -134,50 +98,47 @@
     <div id="loginScreen" class="card fade-in">
         <img src="icon.png" width="80" height="80" class="app-icon">
         <h2>Member Access</h2>
-        <p>Unlock your professional Shopify notification simulator.</p>
         <div class="setup-group">
             <label>Email Address</label>
-            <input type="email" id="email" placeholder="example@icloud.com" autocomplete="email">
-            <label>Password</label>
-            <input type="password" id="password" placeholder="Required">
+            <input type="email" id="email" placeholder="your@email.com">
             <label>Access Code</label>
-            <input type="text" id="accessCode" placeholder="Enter 5-digit code">
+            <input type="text" id="accessCode" placeholder="Enter code">
         </div>
-        <button class="btn-login" onclick="checkLogin()">Sign In</button>
-        <div id="loginError">Invalid credentials or access code.</div>
+        <button class="btn-login" onclick="checkLogin()">Login</button>
+        <div id="loginError">Invalid credentials.</div>
     </div>
 
     <div id="appScreen" class="card fade-in">
-        <img src="icon.png" width="80" height="80" class="app-icon">
-        <h2>Simulator Console</h2>
-        <p>Configure your live notifications stream.</p>
+        <img src="icon.png" width="60" height="60" class="app-icon">
+        <h2>Shopify Pro</h2>
         
         <div class="setup-group">
             <label>Store Display Name</label>
             <input type="text" id="storeNameInput" placeholder="Online Store">
-            <label>Auto-Send Interval (s)</label>
-            <input type="number" id="intervalInput" value="2" min="1">
+            
+            <label>Interval (seconds)</label>
+            <input type="number" id="intervalInput" value="2">
+
+            <div class="price-settings">
+                <label>Price for 1 item (€)</label>
+                <input type="text" id="price1" value="29,95">
+                
+                <label>Price for 2 items (€)</label>
+                <input type="text" id="price2" value="49,95">
+                
+                <label>Price for 3 items (€)</label>
+                <input type="text" id="price3" value="89,95">
+            </div>
         </div>
 
-        <button class="btn-start" onclick="startSysteem()">Start Stream</button>
-        <button class="btn-stop" onclick="stopSysteem()">Stop Stream</button>
+        <button class="btn-start" onclick="startSysteem()">Start Notifications</button>
+        <button class="btn-stop" onclick="stopSysteem()">Stop Notifications</button>
         
         <div id="status">Status: Idle</div>
     </div>
 
     <script>
-        const validCodes = [
-            "ABC12", "XYX88", "KL3P6", "JRT99", "BND45", "MQR11", "ZST67", "HJK23", "VFR89", "LOP54",
-            "MNO12", "QWE34", "RTY56", "ASD78", "FGH90", "ZXC21", "VBN43", "UIO65", "PAS87", "DFG09",
-            "JKL32", "POU54", "YTR76", "REW98", "NBV10", "CXS29", "MLK47", "JHG63", "FDA81", "POW02",
-            "BNM19", "KJH37", "GDS55", "TRE73", "YUI91", "HGF08", "DSA26", "MNB44", "VXC62", "POI80",
-            "LKJ07", "HFD25", "SAM43", "PET61", "TOM79", "DAN97", "BEN15", "JES33", "MAX51", "LOU69",
-            "KIM87", "MAR05", "SOP23", "JUL41", "EMI59", "LUC77", "TIM95", "CAS13", "ROB31", "MAR49",
-            "ANN67", "SAR85", "JOY03", "NOA21", "LEO39", "ZEO57", "XAV75", "PAU93", "VIC11", "FLO29",
-            "BRU47", "CLA65", "OLI83", "SEA01", "ANT19", "EDW37", "FRA55", "GEO73", "HAR91", "IZA09",
-            "JAS27", "KAT45", "LIL63", "MIA81", "NIN99", "OPA17", "QUI35", "ROS53", "STE71", "TES89",
-            "UNA07", "VAL25", "WES43", "XEN61", "YAR79", "ZOE97", "ALB15", "BOR33", "CYR51", "DOR69"
-        ];
+        const validCodes = ["ABC12", "XYX88", "KL3P6", "JRT99", "BND45", "MQR11", "ZST67", "HJK23", "VFR89", "LOP54", "MNO12", "QWE34", "RTY56", "ASD78", "FGH90", "ZXC21", "VBN43", "UIO65", "PAS87", "DFG09", "JKL32", "POU54", "YTR76", "REW98", "NBV10", "CXS29", "MLK47", "JHG63", "FDA81", "POW02", "BNM19", "KJH37", "GDS55", "TRE73", "YUI91", "HGF08", "DSA26", "MNB44", "VXC62", "POI80", "LKJ07", "HFD25", "SAM43", "PET61", "TOM79", "DAN97", "BEN15", "JES33", "MAX51", "LOU69", "KIM87", "MAR05", "SOP23", "JUL41", "EMI59", "LUC77", "TIM95", "CAS13", "ROB31", "MAR49", "ANN67", "SAR85", "JOY03", "NOA21", "LEO39", "ZEO57", "XAV75", "PAU93", "VIC11", "FLO29", "BRU47", "CLA65", "OLI83", "SEA01", "ANT19", "EDW37", "FRA55", "GEO73", "HAR91", "IZA09", "JAS27", "KAT45", "LIL63", "MIA81", "NIN99", "OPA17", "QUI35", "ROS53", "STE71", "TES89", "UNA07", "VAL25", "WES43", "XEN61", "YAR79", "ZOE97", "ALB15", "BOR33", "CYR51", "DOR69"];
 
         if (localStorage.getItem('isLoggedIn') === 'true') {
             document.getElementById('loginScreen').style.display = 'none';
@@ -187,7 +148,6 @@
         function checkLogin() {
             const email = document.getElementById('email').value;
             const code = document.getElementById('accessCode').value.toUpperCase();
-            
             if (email.includes('@') && validCodes.includes(code)) {
                 localStorage.setItem('isLoggedIn', 'true');
                 document.getElementById('loginScreen').style.display = 'none';
@@ -203,15 +163,13 @@
 
         function startSysteem() {
             if (timer !== null) return;
-            const intervalSeconds = document.getElementById('intervalInput').value;
             const statusDiv = document.getElementById('status');
-
             Notification.requestPermission().then(perm => {
                 if (perm === "granted") {
-                    statusDiv.innerText = "Status: Live";
-                    statusDiv.style.color = "var(--ios-green)";
+                    statusDiv.innerText = "Status: Running";
+                    statusDiv.style.color = "var(--ios-dark-green)";
                     sendNotification();
-                    timer = setInterval(sendNotification, intervalSeconds * 1000);
+                    timer = setInterval(sendNotification, document.getElementById('intervalInput').value * 1000);
                 }
             });
         }
@@ -219,24 +177,28 @@
         function stopSysteem() {
             clearInterval(timer);
             timer = null;
-            const statusDiv = document.getElementById('status');
-            statusDiv.innerText = "Status: Idle";
-            statusDiv.style.color = "var(--ios-gray)";
+            document.getElementById('status').innerText = "Status: Idle";
+            document.getElementById('status').style.color = "var(--ios-gray)";
         }
 
         function sendNotification() {
             let storeName = document.getElementById('storeNameInput').value.trim() || "Online Store";
+            
+            // Haal de aangepaste prijzen op uit de inputs
+            const p1 = document.getElementById('price1').value;
+            const p2 = document.getElementById('price2').value;
+            const p3 = document.getElementById('price3').value;
+
             const options = [
-                { price: "€29.95", items: "1 item" },
-                { price: "€49.95", items: "2 items" },
-                { price: "€69.95", items: "2 items" },
-                { price: "€89.95", items: "3 items" }
+                { price: "€" + p1, items: "1 item" },
+                { price: "€" + p2, items: "2 items" },
+                { price: "€" + p3, items: "3 items" }
             ];
+
             const randomOption = options[Math.floor(Math.random() * options.length)];
-            const title = "Order #" + orderNumber;
             const bodyText = randomOption.price + ", " + randomOption.items + " from Online Store • " + storeName;
 
-            new Notification(title, { body: bodyText, icon: "icon.png" });
+            new Notification("Order #" + orderNumber, { body: bodyText, icon: "icon.png" });
             audio.play().catch(e => {});
             orderNumber++;
         }
