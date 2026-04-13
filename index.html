@@ -2,73 +2,170 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Shopify Simulator Pro</title>
     <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
     <style>
-        body { font-family: -apple-system, sans-serif; background: #f6f6f7; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; width: 85%; max-width: 400px; }
+        :root {
+            --ios-blue: #007aff;
+            --ios-green: #34c759;
+            --ios-red: #ff3b30;
+            --ios-gray: #8e8e93;
+            --ios-bg: #f2f2f7;
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background: var(--ios-bg); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0;
+            color: #000;
+        }
+
+        .card { 
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(10px);
+            padding: 30px 24px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            text-align: center; 
+            width: 88%; 
+            max-width: 360px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
         
-        /* Schermen */
         #loginScreen { display: block; }
         #appScreen { display: none; }
         
-        img { border-radius: 18px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h2 { margin-bottom: 5px; color: #202223; }
-        p { color: #6d7175; margin-bottom: 20px; font-size: 13px; }
+        .app-icon { 
+            border-radius: 20%; 
+            margin-bottom: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            background: white;
+        }
 
-        .setup-group { margin-bottom: 15px; text-align: left; }
-        label { display: block; font-size: 11px; font-weight: bold; color: #6d7175; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-        input { width: 100%; padding: 12px; border: 1px solid #babfc3; border-radius: 8px; font-size: 16px; box-sizing: border-box; margin-bottom: 10px; }
+        h2 { font-weight: 700; font-size: 24px; margin-bottom: 8px; letter-spacing: -0.5px; }
+        p { color: var(--ios-gray); margin-bottom: 25px; font-size: 15px; line-height: 1.4; }
+
+        .setup-group { margin-bottom: 20px; text-align: left; }
+        label { 
+            display: block; 
+            font-size: 12px; 
+            font-weight: 600; 
+            color: var(--ios-gray); 
+            margin-bottom: 6px; 
+            margin-left: 4px;
+            text-transform: uppercase;
+        }
+
+        input { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border: 1px solid #d1d1d6; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            box-sizing: border-box; 
+            margin-bottom: 12px; 
+            background: #fff;
+            transition: border 0.2s ease;
+            -webkit-appearance: none;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--ios-blue);
+        }
+
+        button { 
+            border: none; 
+            padding: 16px; 
+            border-radius: 14px; 
+            font-weight: 600; 
+            font-size: 17px; 
+            cursor: pointer; 
+            width: 100%; 
+            transition: transform 0.1s ease, opacity 0.2s ease;
+        }
+
+        button:active { transform: scale(0.98); opacity: 0.9; }
+
+        .btn-login { background: #000; color: white; margin-top: 10px; }
+        .btn-start { background: var(--ios-green); color: white; margin-top: 10px; margin-bottom: 12px; }
+        .btn-stop { background: var(--ios-red); color: white; }
         
-        .btn-login { background: #2c2e2f; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 10px; }
-        .btn-start { background: #008060; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; margin-bottom: 10px; }
-        .btn-stop { background: #d72c0d; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; }
-        
-        #status { margin-top: 20px; font-weight: 500; font-size: 14px; color: #6d7175; }
-        #loginError { color: #d72c0d; font-size: 12px; margin-top: 10px; display: none; font-weight: bold; }
+        #status { 
+            margin-top: 25px; 
+            font-weight: 600; 
+            font-size: 14px; 
+            color: var(--ios-gray);
+            padding: 8px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        #loginError { 
+            color: var(--ios-red); 
+            font-size: 13px; 
+            margin-top: 14px; 
+            display: none; 
+            font-weight: 500; 
+        }
+
+        /* Subtiele animatie bij schermwissel */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-    <div id="loginScreen" class="card">
-        <img src="icon.png" width="80" height="80">
+    <div id="loginScreen" class="card fade-in">
+        <img src="icon.png" width="80" height="80" class="app-icon">
         <h2>Member Access</h2>
-        <p>Enter your details to unlock the simulator</p>
+        <p>Unlock your professional Shopify notification simulator.</p>
         <div class="setup-group">
             <label>Email Address</label>
-            <input type="email" id="email" placeholder="your@email.com">
+            <input type="email" id="email" placeholder="example@icloud.com" autocomplete="email">
             <label>Password</label>
-            <input type="password" id="password" placeholder="••••••••">
+            <input type="password" id="password" placeholder="Required">
             <label>Access Code</label>
-            <input type="text" id="accessCode" placeholder="e.g. KL3P6">
+            <input type="text" id="accessCode" placeholder="Enter 5-digit code">
         </div>
-        <button class="btn-login" onclick="checkLogin()">Login</button>
-        <div id="loginError">Invalid access code or email.</div>
+        <button class="btn-login" onclick="checkLogin()">Sign In</button>
+        <div id="loginError">Invalid credentials or access code.</div>
     </div>
 
-    <div id="appScreen" class="card">
-        <img src="icon.png" width="80" height="80">
-        <h2>Shopify Setup</h2>
-        <p>Customize your notifications</p>
+    <div id="appScreen" class="card fade-in">
+        <img src="icon.png" width="80" height="80" class="app-icon">
+        <h2>Simulator Console</h2>
+        <p>Configure your live notifications stream.</p>
         
         <div class="setup-group">
-            <label>Store Name</label>
-            <input type="text" id="storeNameInput" placeholder="e.g. Online Store">
-            <label>Interval (seconds)</label>
+            <label>Store Display Name</label>
+            <input type="text" id="storeNameInput" placeholder="Online Store">
+            <label>Auto-Send Interval (s)</label>
             <input type="number" id="intervalInput" value="2" min="1">
         </div>
 
-        <button class="btn-start" onclick="startSysteem()">Start Notifications</button>
-        <button class="btn-stop" onclick="stopSysteem()">Stop Notifications</button>
+        <button class="btn-start" onclick="startSysteem()">Start Stream</button>
+        <button class="btn-stop" onclick="stopSysteem()">Stop Stream</button>
         
         <div id="status">Status: Idle</div>
     </div>
 
     <script>
-        // LIJST VAN 100 CODES
         const validCodes = [
             "ABC12", "XYX88", "KL3P6", "JRT99", "BND45", "MQR11", "ZST67", "HJK23", "VFR89", "LOP54",
             "MNO12", "QWE34", "RTY56", "ASD78", "FGH90", "ZXC21", "VBN43", "UIO65", "PAS87", "DFG09",
@@ -82,7 +179,6 @@
             "UNA07", "VAL25", "WES43", "XEN61", "YAR79", "ZOE97", "ALB15", "BOR33", "CYR51", "DOR69"
         ];
 
-        // Check login status bij laden
         if (localStorage.getItem('isLoggedIn') === 'true') {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('appScreen').style.display = 'block';
@@ -101,7 +197,6 @@
             }
         }
 
-        // SHOPIFY SIMULATOR LOGICA
         let audio = new Audio('kaching.mp3');
         let orderNumber = 1; 
         let timer = null;
@@ -113,8 +208,8 @@
 
             Notification.requestPermission().then(perm => {
                 if (perm === "granted") {
-                    statusDiv.innerText = "Status: Running...";
-                    statusDiv.style.color = "#008060";
+                    statusDiv.innerText = "Status: Live";
+                    statusDiv.style.color = "var(--ios-green)";
                     sendNotification();
                     timer = setInterval(sendNotification, intervalSeconds * 1000);
                 }
@@ -124,31 +219,24 @@
         function stopSysteem() {
             clearInterval(timer);
             timer = null;
-            document.getElementById('status').innerText = "Status: Stopped";
-            document.getElementById('status').style.color = "#d72c0d";
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerText = "Status: Idle";
+            statusDiv.style.color = "var(--ios-gray)";
         }
 
         function sendNotification() {
             let storeName = document.getElementById('storeNameInput').value.trim() || "Online Store";
-
             const options = [
                 { price: "€29.95", items: "1 item" },
                 { price: "€49.95", items: "2 items" },
                 { price: "€69.95", items: "2 items" },
                 { price: "€89.95", items: "3 items" }
             ];
-
             const randomOption = options[Math.floor(Math.random() * options.length)];
             const title = "Order #" + orderNumber;
-            
-            // Exacte indeling zoals gevraagd:
             const bodyText = randomOption.price + ", " + randomOption.items + " from Online Store • " + storeName;
 
-            new Notification(title, {
-                body: bodyText,
-                icon: "icon.png"
-            });
-
+            new Notification(title, { body: bodyText, icon: "icon.png" });
             audio.play().catch(e => {});
             orderNumber++;
         }
