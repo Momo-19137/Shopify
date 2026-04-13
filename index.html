@@ -176,8 +176,15 @@
         let audio = new Audio('kaching.mp3');
         let orderNumber = 1; 
         let timer = null;
+        const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
 
         function startSysteem() {
+            // Safari Check
+            if (!isStandalone) {
+                alert("⚠️ ACTION REQUIRED\n\nWhen on iOS: To enable notifications, you must add this app to your Home Screen.\n\n1. Tap the Share button below\n2. Scroll down and tap 'Add to Home Screen'");
+                return;
+            }
+
             if (timer !== null) return;
             const statusDiv = document.getElementById('status');
             Notification.requestPermission().then(perm => {
