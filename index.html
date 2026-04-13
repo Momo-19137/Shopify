@@ -4,54 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>Shopify Simulator Pro</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
     <style>
         body { font-family: -apple-system, sans-serif; background: #f6f6f7; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
         .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; width: 85%; max-width: 400px; }
         
-        /* Login Scherm Stijl */
+        /* Schermen */
         #loginScreen { display: block; }
         #appScreen { display: none; }
         
-        input { width: 100%; padding: 12px; border: 1px solid #babfc3; border-radius: 8px; font-size: 16px; box-sizing: border-box; margin-bottom: 15px; }
-        .btn-login { background: #2c2e2f; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; }
+        img { border-radius: 18px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { margin-bottom: 5px; color: #202223; }
+        p { color: #6d7175; margin-bottom: 20px; font-size: 13px; }
+
+        .setup-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; font-size: 11px; font-weight: bold; color: #6d7175; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input { width: 100%; padding: 12px; border: 1px solid #babfc3; border-radius: 8px; font-size: 16px; box-sizing: border-box; margin-bottom: 10px; }
         
-        /* App Stijl */
-        .btn-start { background: #008060; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; margin-bottom: 10px; }
-        .btn-stop { background: #d72c0d; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; }
-        label { display: block; text-align: left; font-size: 11px; font-weight: bold; color: #6d7175; text-transform: uppercase; margin-bottom: 5px; }
+        .btn-login { background: #2c2e2f; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 10px; }
+        .btn-start { background: #008060; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; margin-bottom: 10px; }
+        .btn-stop { background: #d72c0d; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; }
+        
+        #status { margin-top: 20px; font-weight: 500; font-size: 14px; color: #6d7175; }
+        #loginError { color: #d72c0d; font-size: 12px; margin-top: 10px; display: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="loginScreen" class="card">
-        <img src="icon.png" width="60" style="border-radius: 12px; margin-bottom: 10px;">
-        <h2>Login</h2>
-        <p style="font-size: 13px; color: #6d7175;">Enter your credentials to access the simulator.</p>
-        <input type="email" id="email" placeholder="Email address">
-        <input type="password" id="password" placeholder="Password">
-        <input type="text" id="accessCode" placeholder="Access Code (e.g. KL3P6)">
+        <img src="icon.png" width="80" height="80">
+        <h2>Member Access</h2>
+        <p>Enter your details to unlock the simulator</p>
+        <div class="setup-group">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="your@email.com">
+            <label>Password</label>
+            <input type="password" id="password" placeholder="••••••••">
+            <label>Access Code</label>
+            <input type="text" id="accessCode" placeholder="e.g. KL3P6">
+        </div>
         <button class="btn-login" onclick="checkLogin()">Login</button>
-        <p id="loginError" style="color: red; font-size: 12px; margin-top: 10px; display: none;">Invalid code or details.</p>
+        <div id="loginError">Invalid access code or email.</div>
     </div>
 
     <div id="appScreen" class="card">
-        <h2>Notification Setup</h2>
-        <div style="margin-bottom: 20px;">
+        <img src="icon.png" width="80" height="80">
+        <h2>Shopify Setup</h2>
+        <p>Customize your notifications</p>
+        
+        <div class="setup-group">
             <label>Store Name</label>
             <input type="text" id="storeNameInput" placeholder="e.g. Online Store">
             <label>Interval (seconds)</label>
-            <input type="number" id="intervalInput" value="2">
+            <input type="number" id="intervalInput" value="2" min="1">
         </div>
+
         <button class="btn-start" onclick="startSysteem()">Start Notifications</button>
-        <button class="btn-stop" onclick="stopSysteem()">Stop</button>
-        <p id="status" style="font-size: 14px; margin-top: 15px;">Status: Idle</p>
+        <button class="btn-stop" onclick="stopSysteem()">Stop Notifications</button>
+        
+        <div id="status">Status: Idle</div>
     </div>
 
     <script>
-        // LIJST VAN 100 CODES (3 letters, 2 cijfers)
+        // LIJST VAN 100 CODES
         const validCodes = [
-            "ABC12", "XYX88", "KLP36", "JRT99", "BND45", "MQR11", "ZST67", "HJK23", "VFR89", "LOP54",
+            "ABC12", "XYX88", "KL3P6", "JRT99", "BND45", "MQR11", "ZST67", "HJK23", "VFR89", "LOP54",
             "MNO12", "QWE34", "RTY56", "ASD78", "FGH90", "ZXC21", "VBN43", "UIO65", "PAS87", "DFG09",
             "JKL32", "POU54", "YTR76", "REW98", "NBV10", "CXS29", "MLK47", "JHG63", "FDA81", "POW02",
             "BNM19", "KJH37", "GDS55", "TRE73", "YUI91", "HGF08", "DSA26", "MNB44", "VXC62", "POI80",
@@ -63,7 +82,7 @@
             "UNA07", "VAL25", "WES43", "XEN61", "YAR79", "ZOE97", "ALB15", "BOR33", "CYR51", "DOR69"
         ];
 
-        // Controleer of iemand al ingelogd is geweest
+        // Check login status bij laden
         if (localStorage.getItem('isLoggedIn') === 'true') {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('appScreen').style.display = 'block';
@@ -74,10 +93,7 @@
             const code = document.getElementById('accessCode').value.toUpperCase();
             
             if (email.includes('@') && validCodes.includes(code)) {
-                // Sla op dat deze browser toegang heeft
                 localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userEmail', email);
-                
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appScreen').style.display = 'block';
             } else {
@@ -85,18 +101,22 @@
             }
         }
 
-        // SHOPIFY LOGICA (Zelfde als voorheen)
+        // SHOPIFY SIMULATOR LOGICA
         let audio = new Audio('kaching.mp3');
-        let orderNumber = 1;
+        let orderNumber = 1; 
         let timer = null;
 
         function startSysteem() {
             if (timer !== null) return;
+            const intervalSeconds = document.getElementById('intervalInput').value;
+            const statusDiv = document.getElementById('status');
+
             Notification.requestPermission().then(perm => {
                 if (perm === "granted") {
-                    document.getElementById('status').innerText = "Status: Running...";
-                    timer = setInterval(sendNotification, document.getElementById('intervalInput').value * 1000);
+                    statusDiv.innerText = "Status: Running...";
+                    statusDiv.style.color = "#008060";
                     sendNotification();
+                    timer = setInterval(sendNotification, intervalSeconds * 1000);
                 }
             });
         }
@@ -105,14 +125,30 @@
             clearInterval(timer);
             timer = null;
             document.getElementById('status').innerText = "Status: Stopped";
+            document.getElementById('status').style.color = "#d72c0d";
         }
 
         function sendNotification() {
-            let storeName = document.getElementById('storeNameInput').value || "Online Store";
-            new Notification("Order #" + orderNumber, {
-                body: "€49.95, 1 item • " + storeName,
+            let storeName = document.getElementById('storeNameInput').value.trim() || "Online Store";
+
+            const options = [
+                { price: "€29.95", items: "1 item" },
+                { price: "€49.95", items: "2 items" },
+                { price: "€69.95", items: "2 items" },
+                { price: "€89.95", items: "3 items" }
+            ];
+
+            const randomOption = options[Math.floor(Math.random() * options.length)];
+            const title = "Order #" + orderNumber;
+            
+            // Exacte indeling zoals gevraagd:
+            const bodyText = randomOption.price + ", " + randomOption.items + " from Online Store • " + storeName;
+
+            new Notification(title, {
+                body: bodyText,
                 icon: "icon.png"
             });
+
             audio.play().catch(e => {});
             orderNumber++;
         }
